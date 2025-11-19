@@ -1,0 +1,114 @@
+[
+  {
+    "empresa": "Corticeira Amorim SGPS SA",
+    "ticker": "COR",
+    "mercado": "XLIS",
+    "premium": true,
+    "resumen": "Líder mundial en corcho; diversificación industrial.",
+    "url_substack": "https://minaironcapital.substack.com"
+  },
+  {
+    "empresa": "Desarrollos Especiales de Sistemas de Anclaje SA",
+    "ticker": "DESA",
+    "mercado": "BMEX",
+    "premium": false,
+    "resumen": "Fabricante nicho con márgenes sólidos.",
+    "url_substack": "https://minaironcapital.substack.com"
+  },
+  {
+    "empresa": "Logista Integral SA",
+    "ticker": "LOG",
+    "mercado": "BMEX",
+    "premium": true,
+    "resumen": "Distribución con flujos predecibles; foco en eficiencia y dividendo.",
+    "url_substack": "https://minaironcapital.substack.com"
+  },
+  {
+    "empresa": "Ebro Foods SA",
+    "ticker": "EBRO",
+    "mercado": "BMEX",
+    "premium": false,
+    "resumen": "Marcas de alimentación (arroz/pasta) y caja estable.",
+    "url_substack": "https://minaironcapital.substack.com"
+  },
+  {
+    "empresa": "Puig Brands SA",
+    "ticker": "PUIG",
+    "mercado": "BMEX",
+    "premium": true,
+    "resumen": "Cosmética/perfumería global; crecimiento y márgenes.",
+    "url_substack": "https://minaironcapital.substack.com"
+  },
+  {
+    "empresa": "Clínica Baviera SA",
+    "ticker": "CBAV",
+    "mercado": "BMEX",
+    "premium": true,
+    "resumen": "Red oftalmológica; crecimiento orgánico.",
+    "url_substack": "https://minaironcapital.substack.com"
+  },
+  {
+    "empresa": "Sanofi SA",
+    "ticker": "SAN",
+    "mercado": "XPAR",
+    "premium": false,
+    "resumen": "Big Pharma defensiva y diversificada.",
+    "url_substack": "https://minaironcapital.substack.com"
+  },
+  {
+    "empresa": "CIE Automotive SA",
+    "ticker": "CIE",
+    "mercado": "BMEX",
+    "premium": false,
+    "resumen": "Auto auxiliar; ROCE elevado.",
+    "url_substack": "https://minaironcapital.substack.com"
+  },
+  {
+    "empresa": "Colonial SFL SOCIMI SA",
+    "ticker": "COL",
+    "mercado": "BMEX",
+    "premium": false,
+    "resumen": "Oficinas prime; vigilar NAV y deuda.",
+    "url_substack": "https://minaironcapital.substack.com"
+  },
+  {
+    "empresa": "Henkel AG & Co KGaA",
+    "ticker": "HEN",
+    "mercado": "XETR",
+    "premium": false,
+    "resumen": "Consumo/adhesivos; foco en márgenes.",
+    "url_substack": "https://minaironcapital.substack.com"
+  },
+  {
+    "empresa": "Iberpapel Gestión SA",
+    "ticker": "IBG",
+    "mercado": "BMEX",
+    "premium": false,
+    "resumen": "Papel/celulosa; costes energéticos mandan.",
+    "url_substack": "https://minaironcapital.substack.com"
+  },
+  {
+    "empresa": "Ercros SA",
+    "ticker": "ECR",
+    "mercado": "BMEX",
+    "premium": false,
+    "resumen": "Química; capex y volatilidad materia prima.",
+    "url_substack": "https://minaironcapital.substack.com"
+  },
+  {
+    "empresa": "Vidrala SA",
+    "ticker": "VID.MC",
+    "mercado": "BMEX",
+    "premium": true,
+    "resumen": "Vidrio de envase; contratos a largo.",
+    "url_substack": "https://minaironcapital.substack.com"
+  },
+  {
+    "empresa": "Grupo Catalana Occidente SA",
+    "ticker": "GCO",
+    "mercado": "BMEX",
+    "premium": false,
+    "resumen": "Seguros y crédito; disciplina de capital.",
+    "url_substack": "https://minaironcapital.substack.com"
+  }
+]
