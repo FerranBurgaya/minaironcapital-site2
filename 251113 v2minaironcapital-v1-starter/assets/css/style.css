@@ -19,7 +19,7 @@ a{color:#8ecbff;text-decoration:none}
 .foot{color:var(--muted);border-top:1px solid var(--stroke);padding:30px 20px;margin-top:40px;text-align:center}
 .cookiebar{position:fixed;left:16px;right:16px;bottom:16px;background:#0f1a2d;border:1px solid var(--stroke);border-radius:12px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px}
 .cookiebar button{background:var(--accent);color:white;border:0;border-radius:10px;padding:8px 12px;cursor:pointer}
-.grid-cromos{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.grid-empresas{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
 .flip{perspective:1000px}
 .flip-inner{position:relative;width:100%;height:160px;transition:transform .6s;transform-style:preserve-3d}
 .flip:hover .flip-inner{transform:rotateY(180deg)}

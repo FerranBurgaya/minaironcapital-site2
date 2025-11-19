@@ -1,8 +1,8 @@
 
-async function loadCromos(){
-  const res = await fetch('/data/cromos.json');
+async function loadEmpresas(){
+  const res = await fetch('/data/empresas.json');
   const items = await res.json();
-  const grid = document.getElementById('grid-cromos');
+  const grid = document.getElementById('grid-empresas');
   grid.innerHTML = items.map(it => `
     <a class="flip" href="${it.url_substack}" target="_blank" rel="noopener" title="${it.empresa}">
       <div class="flip-inner">
@@ -20,4 +20,4 @@ async function loadCromos(){
     </a>
   `).join('');
 }
-loadCromos();
+loadEmpresas();
