@@ -44,6 +44,35 @@
   </a>
 </section>
 
+<!-- BARRA DE MERCADO RECUPERADA -->
+<div class="wrap section">
+  <h3>Mercado</h3>
+  <div class="ticker-bar">
+    <div class="tradingview-widget-container">
+      <div class="tradingview-widget-container__widget"></div>
+      <script
+        type="text/javascript"
+        src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js"
+        async>
+      {
+        "symbols": [
+          { "proName": "BME:SAN", "title": "Santander" },
+          { "proName": "BME:ITX", "title": "Inditex" },
+          { "proName": "BME:IBE", "title": "Iberdrola" },
+          { "proName": "BME:BBVA", "title": "BBVA" }
+        ],
+        "showSymbolLogo": true,
+        "colorTheme": "dark",
+        "isTransparent": true,
+        "displayMode": "adaptive",
+        "locale": "es"
+      }
+      </script>
+    </div>
+  </div>
+</div>
+<!-- FIN BARRA DE MERCADO -->
+  
 <div class="wrap section">
   <div class="cards">
 
