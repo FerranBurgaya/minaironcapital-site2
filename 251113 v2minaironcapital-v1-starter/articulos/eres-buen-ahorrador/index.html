@@ -1,130 +1,102 @@
-<!doctype html>
-<html lang="es">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>¿Eres buen ahorrador? — Minairon Capital</title>
-  <meta name="description" content="Test de 30 segundos y plan de acción para pasar de ahorrar a invertir con criterio: cuentas remuneradas, depósitos, letras, renta fija, indexados y acciones." />
-  <link rel="icon" href="/assets/img/favicon.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=IBM+Plex+Sans:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/style.css" />
+<script>
+const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-.../pub?gid=0&single=true&output=csv";
 
-  <!-- Metadatos sociales -->
-  <link rel="canonical" href="https://minaironcapital.com/articulos/eres-buen-ahorrador/">
-  <meta property="og:title" content="¿Eres buen ahorrador? — Minairon Capital">
-  <meta property="og:description" content="Test de 30 segundos y plan de acción para que tu dinero trabaje de verdad.">
-  <meta property="og:type" content="article">
-  <meta property="og:url" content="https://minaironcapital.com/articulos/eres-buen-ahorrador/">
-  <meta property="og:image" content="https://minaironcapital.com/assets/img/og-cover.jpg">
-  <meta name="twitter:card" content="summary_large_image">
-</head>
-<body>
+const parseNumber = v => {
+  const s = (v||"").trim().replace(/\./g,'').replace(',', '.'); // 1.234,56 -> 1234.56
+  const n = Number(s);
+  return isNaN(n) ? null : n;
+};
 
-<header class="wrap header">
-  <a class="brand" href="/"><img class="logo" src="/assets/img/logo.png" alt="Minairon Capital" /><span>Minairon Capital</span></a>
-  <nav class="nav">
-    <a href="/dividendos/">Dividendos</a>
-    <a href="/empresas/">Empresas</a> <!-- si aún usas /cromos/, cambia este href -->
-    <a href="/sobre/">Sobre</a>
-    <a href="/portafolio/">Portafolio</a>
-    <a href="/contacto/">Contacto</a>
-  </nav>
-</header>
+async function fetchCSV(url){
+  const res = await fetch(url, {cache: "no-store"});
+  const text = await res.text();
+  // soporta filas con comas dentro de comillas
+  const rows = text.split(/\r?\n/).map(line=>{
+    const out=[]; let cur="", inQ=false;
+    for (let i=0;i<line.length;i++){
+      const c=line[i], n=line[i+1];
+      if (c === '"' && n === '"'){ cur+='"'; i++; continue; }
+      if (c === '"'){ inQ = !inQ; continue; }
+      if (c === ',' && !inQ){ out.push(cur.trim()); cur=""; continue; }
+      cur += c;
+    }
+    out.push(cur.trim());
+    return out;
+  });
+  return rows;
+}
 
-<section class="wrap hero">
-  <h1>¿Eres buen ahorrador?</h1>
-  <p class="lead">Haz el test en 30 segundos y descubre cómo pasar de ahorrar a invertir con criterio.</p>
-  <a class="cta" href="https://minaironcapital.substack.com/subscribe" target="_blank" rel="noopener">Suscribirme en Substack</a>
-</section>
+function normalize(rows){
+  const [head,...data] = rows.filter(r=>r.length>1);
+  const idx = Object.fromEntries(head.map((h,i)=>[h.trim().toLowerCase(), i]));
+  const pick = (r,k,alt=[]) => r[idx[k]] ?? alt.map(a=>r[idx[a]]).find(Boolean) ?? "";
+  return data.map(r=>({
+    ticker:        pick(r,'ticker'),
+    empresa:       pick(r,'empresa'),
+    ex_date:       pick(r,'ex_date'),
+    pay_date:      pick(r,'pay_dat', ['pay_date','paydate']),
+    importe_bruto: parseNumber(pick(r,'importe_bru', ['importe','importe_bruto'])),
+    moneda:        pick(r,'moneda') || 'EUR',
+    estado:        (pick(r,'estado')||'').toLowerCase(),
+    fuente_url:    pick(r,'fuente_url')
+  }));
+}
 
-<div class="wrap section">
-  <div class="card">
-    <h3>Test (marca Sí/No)</h3>
-    <ul>
-      <li>¿Tu efectivo <strong>cobra intereses</strong> (cuenta remunerada o depósito)?</li>
-      <li>¿Tienes parte de tu dinero <strong>invertido</strong> a 3–5 años (fondos/índices/renta fija/acciones)?</li>
-      <li>¿En 5 años tu rendimiento medio <strong>superó la inflación</strong> acumulada (≈ 17,2 p.p.)?</li>
-      <li>¿Automatizas el ahorro y evitas dejar dinero sin remunerar?</li>
-    </ul>
-    <p><strong>0–1 Sí:</strong> pierdes poder adquisitivo · <strong>2–3 Sí:</strong> buen camino · <strong>4 Sí:</strong> excelente.</p>
-    <p class="note">Cálculo de inflación aproximado; revisa datos del INE.</p>
-  </div>
-</div>
+function monthKey(iso){
+  if (!iso) return 'Sin fecha';
+  const d = new Date(iso);
+  if (isNaN(d)) return iso;
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+}
 
-<div class="wrap section">
-  <div class="card">
-    <h3>El problema, en una línea</h3>
-    <p>En España hay cientos de miles de millones casi sin remuneración. Si tu efectivo no te paga, <strong>alguien</strong> lo está cobrando por ti.</p>
-  </div>
-</div>
+function render(items){
+  const byMonth = new Map();
+  for (const it of items){
+    const k = monthKey(it.ex_date);
+    if (!byMonth.has(k)) byMonth.set(k, []);
+    byMonth.get(k).push(it);
+  }
 
-<div class="wrap section">
-  <div class="card">
-    <h3>Soluciones (de simple a completo)</h3>
-    <h4>Cuentas remuneradas y depósitos</h4>
-    <ul>
-      <li><strong>Cuándo:</strong> liquidez diaria y colchón 3–6 meses (FGD 100.000 € por titular/entidad).</li>
-      <li><strong>Pros:</strong> simple y seguro. <strong>Contras:</strong> puede quedar por debajo de la inflación.</li>
-    </ul>
+  const months = [...byMonth.keys()].sort();
+  const $timeline = document.getElementById('timeline');
+  $timeline.innerHTML = "";
 
-    <h4>Letras del Tesoro</h4>
-    <ul>
-      <li>Prestamos al Estado 3–12 meses; cobramos al vencimiento. Simple y transparente.</li>
-    </ul>
+  for (const m of months){
+    const box = document.createElement('section');
+    box.className = 'month';
+    const title = m.includes('-') ? new Date(m+'-01').toLocaleString('es-ES',{year:'numeric',month:'long'}) : m;
+    box.innerHTML = `<h3>${title}</h3>`;
+    const ul = document.createElement('ul');
 
-    <h4>Fondos de renta fija</h4>
-    <ul>
-      <li>Fíjate en <strong>comisiones muy bajas</strong>; pueden caer si suben tipos (no son depósitos).</li>
-    </ul>
+    byMonth.get(m).sort((a,b)=> (a.ex_date||'').localeCompare(b.ex_date));
 
-    <h4>Fondos indexados</h4>
-    <ul>
-      <li>Comisiones bajas, disciplina y horizonte de 5–10 años (volatilidad).</li>
-    </ul>
+    for (const it of byMonth.get(m)){
+      const li = document.createElement('li');
+      li.className = it.estado.includes('pend') ? 'pendiente' : 'confirmado';
+      li.innerHTML = `
+        <div class="row">
+          <strong>${it.empresa || it.ticker}</strong>
+          <span>Ex: ${it.ex_date || '-'}</span>
+          <span>Pago: ${it.pay_date || '-'}</span>
+          <span>${it.importe_bruto ?? '-'} ${it.moneda}</span>
+          ${it.fuente_url ? `<a href="${it.fuente_url}" target="_blank" rel="noopener">Fuente</a>` : ``}
+        </div>`;
+      ul.appendChild(li);
+    }
+    box.appendChild(ul);
+    $timeline.appendChild(box);
+  }
+}
 
-    <h4>Acciones</h4>
-    <ul>
-      <li>Potencial alto (dividendos + crecimiento), pero requieren <strong>formación y método</strong>.</li>
-      <li>En Minairon, foco en análisis fundamental y dividendos sostenibles.</li>
-    </ul>
-  </div>
-</div>
-
-<div class="wrap section">
-  <div class="card">
-    <h3>Plan de acción (esta semana)</h3>
-    <ol>
-      <li>Mueve tu efectivo a una <strong>cuenta remunerada/depósito</strong> (bajo FGD).</li>
-      <li><strong>Automatiza</strong> traspaso mensual a ahorro/inversión.</li>
-      <li>Define tu <strong>cartera base</strong> (depósitos + renta fija + indexados) y arranca con DCA.</li>
-      <li>Usa mi calendario y notas: <a href="/dividendos/">Dividendos</a> · <a href="/empresas/">Empresas</a>.</li>
-    </ol>
-    <p>
-      <a class="cta" href="https://minaironcapital.substack.com/subscribe" target="_blank" rel="noopener">Suscribirme gratis en Substack</a>
-    </p>
-  </div>
-</div>
-
-<div class="wrap section">
-  <div class="card">
-    <p><em>Publicado también en Substack:</em> 
-      <a href="https://open.substack.com/pub/minaironcapital/p/eres-buen-ahorrador-tal-vez-estes?r=6tv7mq&utm_campaign=post&utm_medium=web" target="_blank" rel="noopener">
-        ¿Eres buen ahorrador?
-      </a>
-    </p>
-    <p><strong>Cierre minairon:</strong> Plan listo; que los minairons trabajen mientras dormimos.</p>
-    <p class="note">Contenido educativo; no es asesoramiento financiero. Las condiciones y tipos pueden cambiar.</p>
-  </div>
-</div>
-
-<footer class="wrap foot">
-  <p>© <span id="y"></span> Minairon Capital · <a href="mailto:hola@minaironcapital.com">hola@minaironcapital.com</a></p>
-  <p class="mute">Educación financiera — <a href="https://minaironcapital.substack.com" target="_blank" rel="noopener">Suscríbete en Substack</a>.</p>
-</footer>
-<script>document.getElementById('y').textContent = new Date().getFullYear()</script>
-
-</body>
-</html>
+(async ()=>{
+  try{
+    const rows = await fetchCSV(CSV_URL);
+    const items = normalize(rows);
+    render(items);
+  }catch(e){
+    console.error(e);
+    document.getElementById('timeline').textContent = "No se pudo cargar el calendario.";
+  }
+})();
+</script>
 
