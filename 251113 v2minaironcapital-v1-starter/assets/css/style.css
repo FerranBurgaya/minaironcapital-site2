@@ -12,7 +12,11 @@ a{color:#8ecbff;text-decoration:none}
 .hero h1{font-family:'IBM Plex Sans',Inter,system-ui;font-size:44px;margin:.2em 0}
 .lead{max-width:700px;color:var(--muted)}
 .cta{display:inline-block;margin-top:16px;background:linear-gradient(135deg,#2a66c4,#79a8ff);color:#061123;padding:12px 16px;border-radius:12px;font-weight:700}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.cards{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
 .card{background:var(--card);border:1px solid var(--stroke);border-radius:16px;padding:18px}
 .card h3{margin:.2em 0 8px}
 .section{padding:20px 0 50px}
