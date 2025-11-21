@@ -34,14 +34,4 @@ a{color:#8ecbff;text-decoration:none}
 .input{background:#0c1425;color:var(--ink);border:1px solid var(--stroke);border-radius:10px;padding:8px 10px}
 .note{color:var(--muted);font-size:.95em}
 .ticker-bar{margin:12px 0}
-/* === Forzar cards una debajo de otra === */
-.cards {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 24px !important;
-}
 
-.card {
-  width: 100% !important;
-  max-width: none !important;
-}
